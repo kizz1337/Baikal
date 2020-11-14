@@ -1,11 +1,12 @@
 <?php
+
 #################################################################
 #  Copyright notice
 #
 #  (c) 2013 Jérôme Schneider <mail@jeromeschneider.fr>
 #  All rights reserved
 #
-#  http://baikal-server.com
+#  http://sabre.io/baikal
 #
 #  This script is part of the Baïkal Server project. The Baïkal
 #  Server project is free software; you can redistribute it
@@ -24,18 +25,15 @@
 #  This copyright notice MUST APPEAR in all copies of the script!
 #################################################################
 
-
 namespace BaikalAdmin\Controller\User;
 
 class AddressBooks extends \Flake\Core\Controller {
-
     protected $aMessages = [];
     protected $oModel;    # \Baikal\Model\Contact
     protected $oUser;    # \Baikal\Model\User
     protected $oForm;    # \Formal\Form
 
     function execute() {
-
         if (($iUser = $this->currentUserId()) === false) {
             throw new \Exception("BaikalAdmin\Controller\User\Contacts::render(): User get-parameter not found.");
         }
@@ -56,7 +54,6 @@ class AddressBooks extends \Flake\Core\Controller {
     }
 
     function render() {
-
         $oView = new \BaikalAdmin\View\User\AddressBooks();
 
         # User
@@ -71,8 +68,10 @@ class AddressBooks extends \Flake\Core\Controller {
             $aAddressBooks[] = [
                 "linkedit"    => $this->linkEdit($addressbook),
                 "linkdelete"  => $this->linkDelete($addressbook),
+                "davuri"      => $this->getDavUri($addressbook),
                 "icon"        => $addressbook->icon(),
                 "label"       => $addressbook->label(),
+                "contacts"    => $addressbook->getContactsBaseRequester()->count(),
                 "description" => $addressbook->get("description"),
             ];
         }
@@ -138,7 +137,6 @@ class AddressBooks extends \Flake\Core\Controller {
     }
 
     protected function actionNew() {
-
         # Building floating model object
         $this->oModel = new \Baikal\Model\AddressBook();
         $this->oModel->set(
@@ -234,14 +232,12 @@ class AddressBooks extends \Flake\Core\Controller {
     }
 
     protected function actionDelete() {
-
         $aParams = $this->getParams();
         $iModel = intval($aParams["delete"]);
 
         if ($this->actionDeleteConfirmed() !== false) {
-
             # catching Exception thrown when model already destroyed
-                # happens when user refreshes page on delete-URL, for instance
+            # happens when user refreshes page on delete-URL, for instance
 
             try {
                 $oModel = new \Baikal\Model\AddressBook($iModel);
@@ -253,7 +249,6 @@ class AddressBooks extends \Flake\Core\Controller {
             # Redirecting to admin home
             \Flake\Util\Tools::redirectUsingMeta($this->linkHome());
         } else {
-
             $oModel = new \Baikal\Model\AddressBook($iModel);
             $this->aMessages[] = \Formal\Core\Message::warningConfirmMessage(
                 "Check twice, you're about to delete " . $oModel->label() . "</strong> from the database !",
@@ -270,5 +265,16 @@ class AddressBooks extends \Flake\Core\Controller {
         return self::buildRoute([
             "user" => $this->currentUserId(),
         ]);
+    }
+
+    /**
+     * Generate a link to the CalDAV/CardDAV URI of the addressbook.
+     *
+     * @param \Baikal\Model\AddressBook $addressbook
+     *
+     * @return string AddressBook DAV URI
+     */
+    protected function getDavUri(\Baikal\Model\AddressBook $addressbook) {
+        return PROJECT_BASEURI . 'dav.php/addressbooks/' . $this->oUser->get('username') . '/' . $addressbook->get('uri') . '/';
     }
 }

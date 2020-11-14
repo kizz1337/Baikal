@@ -10,6 +10,7 @@
 	<thead>
 		<tr>
 			<th>Display name</th>
+			<th>Contacts</th>
 			<th>Description</th>
 			<th class="no-border-left"></th>
 		</tr>
@@ -18,11 +19,13 @@
 		{% for addressbook in addressbooks %}
 		<tr>
 			<td class="col-displayname"><i class="{{ addressbook.icon }}"></i>{{ addressbook.label|escape }}</td>
+			<td class="col-contacts">{{ addressbook.contacts|escape }}</td>
 			<td class="col-description">{{ addressbook.description|escape }}</td>
 			<td class="col-actions no-border-left">
 				<p class="pull-right">
 					<nobr><a class="btn btn-primary" href="{{ addressbook.linkedit }}"><i class="icon-edit icon-white"></i> Edit</a></nobr>
 					<nobr><a class="btn btn-danger" href="{{ addressbook.linkdelete }}"><i class="icon-remove icon-white"></i> Delete</a></nobr>
+					<nobr><a class="btn" href="{{ addressbook.davuri }}"><i class="{{ addressbookicon }}"></i> AddressBook URI</a></nobr>
 				</p>
 			</td>
 		</tr>

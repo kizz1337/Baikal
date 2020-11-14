@@ -1,11 +1,12 @@
 <?php
+
 #################################################################
 #  Copyright notice
 #
 #  (c) 2013 Jérôme Schneider <mail@jeromeschneider.fr>
 #  All rights reserved
 #
-#  http://baikal-server.com
+#  http://sabre.io/baikal
 #
 #  This script is part of the Baïkal Server project. The Baïkal
 #  Server project is free software; you can redistribute it
@@ -24,34 +25,15 @@
 #  This copyright notice MUST APPEAR in all copies of the script!
 #################################################################
 
+namespace Baikal\Controller\Navigation\Topbar;
 
-namespace Baikal\Model\Config;
-
-class Distrib extends \Baikal\Model\Config {
-
-    protected $aConstants = [
-        "BAIKAL_VERSION" => [
-            "type"    => "string",
-            "comment" => "The version of the packaged system"
-        ],
-        "BAIKAL_HOMEPAGE" => [
-            "type"    => "string",
-            "comment" => "The URL to the project homepage",
-        ],
-    ];
-
-    # Default values
-    protected $aData = [
-        "BAIKAL_VERSION"  => "",
-        "BAIKAL_HOMEPAGE" => "",
-    ];
-
-    function formMorphologyForThisModelInstance() {
-        $oMorpho = new \Formal\Form\Morphology();
-        return $oMorpho;
+class Anonymous extends \Flake\Core\Controller {
+    function execute() {
     }
 
-    function label() {
-        return "Baïkal distribution info";
+    function render() {
+        $oView = new \Baikal\View\Navigation\Topbar\Anonymous();
+
+        return $oView->render();
     }
 }

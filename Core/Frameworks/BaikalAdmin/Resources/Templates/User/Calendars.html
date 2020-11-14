@@ -10,6 +10,7 @@
 	<thead>
 		<tr>
 			<th>Display name</th>
+			<th>Events</th>
 			<th>Description</th>
 			<th class="no-border-left"></th>
 		</tr>
@@ -17,12 +18,14 @@
 	<tbody>
 		{% for calendar in calendars %}
 		<tr>
-			<td class="col-displayname"><i class="{{ calendar.icon }}"></i>{{ calendar.label|escape }}</td>
+			<td class="col-displayname"><i class="{{ calendar.icon }}"></i>{{ calendar.label|escape }}{%if calendar.instanced%} <span class="label label-info label-intext">Has instances</span>{% endif %}</td>
+			<td class="col-events">{{ calendar.events|escape }}</td>
 			<td class="col-description">{{ calendar.description|escape }}</td>
 			<td class="col-actions no-border-left">
 				<p class="pull-right">
 					<nobr><a class="btn btn-primary" href="{{ calendar.linkedit }}"><i class="icon-edit icon-white"></i> Edit</a></nobr>
 					<nobr><a class="btn btn-danger" href="{{ calendar.linkdelete }}"><i class="icon-remove icon-white"></i> Delete</a></nobr>
+					<nobr><a class="btn" href="{{ calendar.davuri }}"><i class="{{ calendaricon }}"></i> Calendar URI</a></nobr>
 				</p>
 			</td>
 		</tr>

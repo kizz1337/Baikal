@@ -1,4 +1,5 @@
 <?php
+
 #################################################################
 #  Copyright notice
 #
@@ -24,12 +25,13 @@
 #  This copyright notice MUST APPEAR in all copies of the script!
 #################################################################
 
+namespace Baikal\Core;
 
-namespace BaikalAdmin\Route\Settings;
+class View extends \Flake\Core\View {
+    function templatesPath() {
+        $sViewName = get_class($this);
+        $sTemplate = str_replace("\\", "/", substr($sViewName, strlen("Baikal\\View\\"))) . ".html";
 
-class System extends \Flake\Core\Route {
-
-    static function layout(\Flake\Core\Render\Container &$oRenderContainer) {
-        $oRenderContainer->zone("Payload")->addBlock(new \BaikalAdmin\Controller\Settings\System());
+        return PROJECT_PATH_ROOT . "Core/Resources/Web/Baikal/Templates/" . $sTemplate;
     }
 }

@@ -1,11 +1,12 @@
 <?php
+
 #################################################################
 #  Copyright notice
 #
 #  (c) 2013 Jérôme Schneider <mail@jeromeschneider.fr>
 #  All rights reserved
 #
-#  http://baikal-server.com
+#  http://sabre.io/baikal
 #
 #  This script is part of the Baïkal Server project. The Baïkal
 #  Server project is free software; you can redistribute it
@@ -24,26 +25,23 @@
 #  This copyright notice MUST APPEAR in all copies of the script!
 #################################################################
 
-
 namespace BaikalAdmin\Controller\Navigation;
 
 class Topbar extends \Flake\Core\Controller {
-
     function execute() {
     }
 
     function render() {
-
         $oView = new \BaikalAdmin\View\Navigation\Topbar();
 
         $sCurrentRoute = $GLOBALS["ROUTER"]::getCurrentRoute();
-        $sActiveHome = $sActiveUsers = $sActiveSettingsStandard = $sActiveSettingsSystem = "";
+        $sActiveHome = $sActiveUsers = $sActiveSettingsStandard = $sActiveSettingsDatabase = "";
 
         $sControllerForDefaultRoute = $GLOBALS["ROUTER"]::getControllerForRoute("default");
         $sHomeLink = $sControllerForDefaultRoute::link();
         $sUsersLink = \BaikalAdmin\Controller\Users::link();
         $sSettingsStandardLink = \BaikalAdmin\Controller\Settings\Standard::link();
-        $sSettingsSystemLink = \BaikalAdmin\Controller\Settings\System::link();
+        $sSettingsDatabaseLink = \BaikalAdmin\Controller\Settings\Database::link();
         $sLogoutLink = \BaikalAdmin\Controller\Logout::link();
 
         if ($sCurrentRoute === "default") {
@@ -61,18 +59,18 @@ class Topbar extends \Flake\Core\Controller {
             $sActiveSettingsStandard = "active";
         }
 
-        if ($sCurrentRoute === $GLOBALS["ROUTER"]::getRouteForController("\BaikalAdmin\Controller\Settings\System")) {
-            $sActiveSettingsSystem = "active";
+        if ($sCurrentRoute === $GLOBALS["ROUTER"]::getRouteForController("\BaikalAdmin\Controller\Settings\Database")) {
+            $sActiveSettingsDatabase = "active";
         }
 
         $oView->setData("activehome", $sActiveHome);
         $oView->setData("activeusers", $sActiveUsers);
         $oView->setData("activesettingsstandard", $sActiveSettingsStandard);
-        $oView->setData("activesettingssystem", $sActiveSettingsSystem);
+        $oView->setData("activesettingsdatabase", $sActiveSettingsDatabase);
         $oView->setData("homelink", $sHomeLink);
         $oView->setData("userslink", $sUsersLink);
         $oView->setData("settingsstandardlink", $sSettingsStandardLink);
-        $oView->setData("settingssystemlink", $sSettingsSystemLink);
+        $oView->setData("settingsdatabaselink", $sSettingsDatabaseLink);
         $oView->setData("logoutlink", $sLogoutLink);
 
         return $oView->render();
